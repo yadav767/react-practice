@@ -1,26 +1,23 @@
 import React, { useState } from 'react'
 import { nanoid } from "nanoid";
 import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { asyncLoginUser } from '../store/actions/userAction';
+import { useDispatch } from 'react-redux';
 
 const Login = () => {
+    const dispatch = useDispatch()
+    const { register, reset, handleSubmit } = useForm()
 
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-
-    const submitHandler = (e) => {
-        e.preventDefault()
-        let data = {
-            email: email,
-            password: password,
-        }
-        console.log(data);
+    const loginHandler = (user) => {
+        dispatch(asyncLoginUser(user))
     }
 
     return (
         <div className='flex flex-col items-center justify-center'>
-            <form onSubmit={submitHandler} className='w-1/4'>
-                <input onChange={(e) => setEmail(e.target.value)} type="email" className=' mb-5 outline-0 text-2xl w-full px-5 py-5 border-b border-amber-500' placeholder='test@test.com.....' name='email' />
-                <input onChange={(e) => setPassword(e.target.value)} type="password" className=' mb-5 outline-0 text-2xl w-full px-5 py-5 border-b border-amber-500' placeholder='**********' name='password' />
+            <form onSubmit={handleSubmit(loginHandler)} className='w-1/4'>
+                <input {...register("email")} type="email" className=' mb-5 outline-0 text-2xl w-full px-5 py-5 border-b border-amber-500' placeholder='test@test.com.....' name='email' />
+                <input {...register("password")} type="password" className=' mb-5 outline-0 text-2xl w-full px-5 py-5 border-b border-amber-500' placeholder='**********' name='password' />
                 <button className='px-5 py-3 bg-fuchsia-600 rounded-3xl mt-5'>Login </button>
             </form>
 
